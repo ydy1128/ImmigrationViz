@@ -6,12 +6,19 @@
 	<meta name="description" content=""/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- css Libraries -->
+ 	<link rel="stylesheet" type="text/css" href='lib/bootstrap.min.css'>
+ 	<link rel="stylesheet" type="text/css" href='lib/select2.min.css'>
+ 	<!-- css Files -->
+ 	<link rel="stylesheet" type="text/css" href='css/style.css'>
+ 	<!-- js Libraries -->
 	<script src="lib/d3.js"></script>
 	<script src="https://d3js.org/topojson.v2.min.js"></script>
 	<script src="lib/datamaps.all.js"></script>
- 	<link rel="stylesheet" type="text/css" href='lib/bootstrap.min.css'>
+	<script src="lib/jquery-3.1.1.min.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+	<script src="lib/select2.min.js"></script>
 
- 	<link rel="stylesheet" type="text/css" href='css/style.css'>
 
 
 	<!--[if lt IE 9]>
@@ -43,13 +50,25 @@
 	  </div>
 	</div>
 	<div id="underTopNav"></div>
-	<div id="mapDiv">
+	<div id="controlDiv" class="col-md-12">
+	<div id="mapControl" class="col-md-12">
+		<div id="originCountry" class="country_select col-md-5">
+			<label class="col-md-4">Source: </label>
+			<select class="col-md-8"><option></option></select>
+		</div>
+		<div id="destinationCountry" class="country_select col-md-5">
+			<label class="col-md-4">Destination: </label>
+			<select class="col-md-8"><option></option></select>
+		</div>
+	</div>
+	</div>
+	<div id="mapDiv" class="col-md-12">
 		<div id="mapContainer">
-			
 		</div>
 	</div>
 
 	<script src="js/init.js"></script>
+	<script src="js/control.js"></script>
 
 </body>
 </html>

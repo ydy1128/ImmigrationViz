@@ -1,1 +1,2 @@
-var map = new Datamap({element: document.getElementById('mapContainer')});
+let map = new Datamap({element: document.getElementById('mapContainer')});
+
