@@ -39,55 +39,8 @@ $(document).ready(function(){
     
     // Loading and preprocessing data
     loadData();
-    
-    // Setup bar chart
-    setupBarChart();
 });
 
-function setupBarChart() {
-    barchart_svg = d3.select("#barChart"),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
-    barchart_width = 1300 - margin.left - margin.right,
-    barchart_height = 300 - margin.top - margin.bottom;
-    
-    barchart_g = barchart_svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
-    xscale = d3.scale.ordinal().rangeRoundBands([0, barchart_width], .05),
-    yscale = d3.scale.linear().range([barchart_height, 0]);
-    
-    barchart_xaxis = d3.svg.axis()
-        .scale(xscale)
-        .orient("bottom");
-
-    barchart_yaxis = d3.svg.axis()
-        .scale(yscale)
-        .orient("left")
-        .ticks(10);
-        
-    xscale.domain(all_countries.map(function(d) { return d.name; }));
-    yscale.domain([0, 20]);
-    
-    barchart_g.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + barchart_height + ")")
-          .call(barchart_xaxis)
-        .selectAll("text")
-          .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", "-.55em")
-          .attr("transform", "rotate(-90)" );
-
-    barchart_g.append("g")
-          .attr("class", "y axis")
-          .call(barchart_yaxis)
-        .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end")
-          .text("Number of Immigrants");
-}
 
 // Loads the immigration data from the FileSystem
 function loadData() {
@@ -189,27 +142,7 @@ function loadBubbles(country_id) {
     
     map.bubbles(bubbles);
     loadBarChart(bubbles);
-}
-
-function loadBarChart(data){
-    
-    updateAllCountries(data);
-    
-    bars = barchart_g.selectAll(".bar")
-        .data(data, function (d) {
-    	    return d.id
-        });
- 
-    bars.exit().remove();
- 
-    bars.enter().append("rect")
-            .attr('class', 'bar')
-            .style("fill", "steelblue")
-            .attr("x", function(d) { return xscale(d.name); })
-            .attr("width", xscale.rangeBand())
-            .attr("y", function(d) { return yscale(d.radius); })
-            .attr("height", function(d) { return barchart_height - yscale(d.radius); });
-    
+    //updateAllCountries(data);
 }
 
 function updateAllCountries(data){
