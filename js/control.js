@@ -8,6 +8,19 @@ let dm_countries = c_data.map(function(d){
 
 let selected_origin = null;
 let selected_dest = null;
+let years = ['1990', '1995', '2000', '2005', '2010', '2015'];
+
+$('#yearSelected select').change(function(){
+	console.log($(this).val())
+	selected_year = $(this).val();
+	if(selected_source == ''){
+		console.log('source not selected')
+	}
+	else{
+		loadBubbles(selected_source, selected_year)
+	}
+})
+
 //console.log(dm_countries)
 function loadControlData(){
 	$.ajax({
@@ -30,13 +43,15 @@ function initSelect2(){
 		for(let j = 0; j < dm_countries.length; j++){
 			if(control_countries[i] == dm_countries[j].name){
 				$('#originCountry select').append('<option value="'+dm_countries[j].key+'">'+dm_countries[j].name+'</option>');
-				$('#destinationCountry select').append('<option value="'+dm_countries[j].key+'">'+dm_countries[j].name+'</option>');
 			}
 		}
 		// console.log(countries[i])
 	}
+	for(let i = 0; i < years.length; i++){
+		$('#yearSelected select').append('<option value="'+years[i]+'">'+years[i]+'</option>');
+	}
 	$('#originCountry select').select2();
-	$('#destinationCountry select').select2();
+	$('#yearSelected select').select2();
 	$('svg').find('path').each(function(){
 		abb.push($(this).attr('class').split(' ')[1])
 	})
@@ -53,14 +68,6 @@ $('#originCountry select').change(function(){
 	obj[key] = '#EF4836';
 	selected_origin = obj;
 	// obj = Object.assign(obj, selected_dest);
-	map.updateChoropleth(obj)
-});
-$('#destinationCountry select').change(function(){
-	let key = $(this).val();
-	let obj = {};
-	obj[key] = '#22A7F0';
-	selected_dest = obj;
-	// obj = Object.assign(obj, selected_origin);
 	map.updateChoropleth(obj)
 });
 loadControlData();

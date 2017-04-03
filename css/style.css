@@ -13,7 +13,7 @@ body {
   height: 50px; }
 
 #mapControl {
-  height: 60px;
+  height: 50px;
   margin: 10px 0;
   padding: 10px 10px;
   background: #d3d3d3;
@@ -23,16 +23,12 @@ body {
 
 #mapDiv {
   width: 100%;
-  height: calc(100% - 50px); }
+  height: calc(100% - 95px); }
   #mapDiv #mapContainer {
     position: relative;
     width: calc(100% - 50px);
-    height: calc(100% - 100px);
+    height: 100%;
     display: block;
     margin: auto; }
-    
-.axis {
-  font: 10px sans-serif;
-}
 
 /*# sourceMappingURL=style.css.map */
