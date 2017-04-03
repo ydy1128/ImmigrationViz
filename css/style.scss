@@ -20,18 +20,27 @@ body{
 	padding: 10px 10px;
 	background: #d3d3d3;
 	border-radius: 5px;
-	.country_select{
+	.country-select{
 		display: inline-block;
+	}
+}
+#changeMap{
+	li{
+		cursor: pointer;
 	}
 }
 #mapDiv{
 	width: 100%;
 	height: calc(100% - 95px);
-	#mapContainer{
+	.map-container{
+		display: none;
 		position: relative;
 		width: calc(100% - 50px);
 		height: 100%;
-		display: block;
 		margin: auto;
+
+		&.active{
+			display: block;
+		}
 	}
 }

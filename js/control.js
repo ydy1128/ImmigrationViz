@@ -21,6 +21,19 @@ $('#yearSelected select').change(function(){
 	}
 })
 
+$('#changeMap li').click(function(){
+	let id = $(this).attr('id');
+	let map_id = id.toLowerCase() + 'MapContainer';
+
+	$('#changeMap li').removeClass('active');
+	$(this).addClass('active')
+
+	$('.map-container').removeClass('active');
+	$('#'+map_id).addClass('active');
+
+
+})
+
 //console.log(dm_countries)
 function loadControlData(){
 	$.ajax({

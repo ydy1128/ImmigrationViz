@@ -1,5 +1,8 @@
 // Variables
-var map;
+var circlesmap;
+var barsmap;
+var colormap;
+var textmap;
 var countries_input = '';
 var countries_id_input = '';
 var countries;
@@ -34,8 +37,8 @@ var selected_year = '';
 // All these code will only be executed once the DOM it completely loaded
 $(document).ready(function(){
     // Initializing map
-    map = new Datamap({
-        element: document.getElementById('mapContainer'),
+    circlesmap = new Datamap({
+        element: document.getElementById('circlesMapContainer'),
         fills: {
             defaultFill: '#ABDDA4',
         },
@@ -213,7 +216,7 @@ function createAllCountries() {
 
 function loadBubbles(country_id, year) {
     // Cleaning current bubbles
-    map.bubbles([]);
+    circlesmap.bubbles([]);
 
     // Setting up new bubbles    
     var dest_immigrants = data_all[year][country_id];
@@ -232,7 +235,7 @@ function loadBubbles(country_id, year) {
         }
     }
     
-    map.bubbles(bubbles);
+    circlesmap.bubbles(bubbles);
     // loadBarChart(bubbles);
     // updateAllCountries(data);
 }
