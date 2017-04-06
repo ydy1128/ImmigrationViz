@@ -28,7 +28,6 @@ body {
   width: 100%;
   height: calc(100% - 95px); }
   #mapDiv .map-container {
-    display: none;
     position: relative;
     width: calc(100% - 50px);
     height: 100%;

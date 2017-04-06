@@ -1,5 +1,6 @@
 // Variables
 var circlesmap;
+var textmap;
 var barsmap;
 var colormap;
 var textmap;
@@ -43,7 +44,11 @@ $(document).ready(function(){
             defaultFill: '#ABDDA4',
         },
         bubblesConfig: {
-            borderColor: '#555555'
+            borderColor: '#555555',
+            popupTemplate: function(geography, data){
+                // console.log(data.data)
+                return '<div class="hoverinfo"><h6><strong>'+data.name+'</strong></h4><p>'+data.data+'</p></div>';
+            }
         },
         done: function(datamap) {
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
@@ -55,11 +60,37 @@ $(document).ready(function(){
                     loadBubbles(hash_countries[geography.id], selected_year);
                 }
             });
+
         }
     });
-    
+    textmap = new Datamap({
+        element: document.getElementById('textMapContainer'),
+        fills: {
+            defaultFill: '#ABDDA4',
+        },
+        bubblesConfig: {
+            borderColor: '#555555',
+            popupTemplate: function(geography, data){
+                // console.log(data.data)
+                return '<div class="hoverinfo"><h6><strong>'+data.name+'</strong></h4><p>'+data.data+'</p></div>';
+            }
+        },
+        done: function(datamap) {
+            datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+                if(selected_year == ''){
+                    console.log('year not selected')
+                }
+                else{
+                    selected_source = hash_countries[geography.id];
+                    loadNumbers(hash_countries[geography.id], selected_year);
+                }
+
+            });
+        }
+    });
     // Loading and preprocessing data
     loadData();
+    // $('.map-container').not('.active').hide()
 });
 
 
@@ -154,6 +185,12 @@ function loadData() {
     }
     immigrants_request.send();
 
+
+    hideOtherMaps();
+}
+
+function hideOtherMaps(){
+    $('.map-container').not('#circlesMapContainer').hide();
 }
 
 function createCountriesHashtable() {
@@ -220,6 +257,7 @@ function loadBubbles(country_id, year) {
 
     // Setting up new bubbles    
     var dest_immigrants = data_all[year][country_id];
+    var text_labels = {};
     // console.log(dest_immigrants)
     var bubbles = [];
     for (var i = 0; i < dest_immigrants.length; i++) {
@@ -231,13 +269,37 @@ function loadBubbles(country_id, year) {
             item["name"] = countries[i];
             item["radius"] = dest_immigrants[i] / 20000;
             item["centered"] = countries_id[i];
+            item['data'] = dest_immigrants[i];
             bubbles.push(item);
+            console.log(countries_id[i])
+            text_labels[countries_id[i]] = dest_immigrants[i];
         }
     }
     
     circlesmap.bubbles(bubbles);
     // loadBarChart(bubbles);
     // updateAllCountries(data);
+}
+function loadNumbers(country_id, year){
+    var dest_immigrants = data_all[year][country_id];
+    var text_labels = {};
+    var lines = {};
+
+    for (var i = 0; i < dest_immigrants.length; i++) {
+        // console.log(countries_id[i], dest_immigrants[i], parseInt(dest_immigrants[i]))
+        // if(parseInt(countries_id[i]) == -1){
+        //     text_labels[countries_id[i]] = '';
+        // }
+
+        if (dest_immigrants[i] > 0 && countries_id[i] != -1) {
+            text_labels[countries_id[i]] = dest_immigrants[i];
+            lines[countries_id[i]] = 30;
+        }
+    }
+    // console.log(textmap.labels())
+    textmap.labels({'customLabelText': text_labels} );   
+    // textmap.labels();   
+
 }
 
 function updateAllCountries(data){
