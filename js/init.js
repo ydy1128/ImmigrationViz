@@ -60,7 +60,53 @@ $(document).ready(function(){
                     loadBubbles(hash_countries[geography.id], selected_year);
                 }
             });
-
+        }
+    });
+    barsmap = new Datamap({
+        element: document.getElementById('barsMapContainer'),
+        fills: {
+            defaultFill: '#ABDDA4',
+        },
+        bubblesConfig: {
+            borderColor: '#555555',
+            popupTemplate: function(geography, data){
+                // console.log(data.data)
+                return '<div class="hoverinfo"><h6><strong>'+data.name+'</strong></h4><p>'+data.data+'</p></div>';
+            }
+        },
+        done: function(datamap) {
+            datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+               if(selected_year == ''){
+                    console.log('year not selected')
+                }
+                else{
+                    selected_source = hash_countries[geography.id];
+                    loadBars(hash_countries[geography.id], selected_year);
+                }
+            });
+        }
+    });
+    colormap = new Datamap({
+        element: document.getElementById('colorMapContainer'),
+        fills: {
+            defaultFill: '#ABDDA4',
+        },
+        bubblesConfig: {
+            borderColor: '#555555',
+            popupTemplate: function(geography, data){
+                return '<div class="hoverinfo"><h6><strong>'+data.name+'</strong></h4><p>'+data.data+'</p></div>';
+            }
+        },
+        done: function(datamap) {
+            datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+               if(selected_year == ''){
+                    console.log('year not selected')
+                }
+                else{
+                    selected_source = hash_countries[geography.id];
+                    loadColors(hash_countries[geography.id], selected_year);
+                }
+            });
         }
     });
     textmap = new Datamap({
@@ -76,6 +122,7 @@ $(document).ready(function(){
             }
         },
         done: function(datamap) {
+
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
                 if(selected_year == ''){
                     console.log('year not selected')
@@ -258,7 +305,8 @@ function loadBubbles(country_id, year) {
     // Setting up new bubbles    
     var dest_immigrants = data_all[year][country_id];
     var text_labels = {};
-    // console.log(dest_immigrants)
+    var color_labels = {};
+
     var bubbles = [];
     for (var i = 0; i < dest_immigrants.length; i++) {
         if (dest_immigrants[i] > 0 && countries_id[i] != -1) {
@@ -271,35 +319,93 @@ function loadBubbles(country_id, year) {
             item["centered"] = countries_id[i];
             item['data'] = dest_immigrants[i];
             bubbles.push(item);
-            console.log(countries_id[i])
             text_labels[countries_id[i]] = dest_immigrants[i];
         }
     }
-    
+
+    // color_labels[countries_id[country_id]] = '#89C4F4';
+    // circlesmap.updateChoropleth(color_labels, {reset: true})
+
     circlesmap.bubbles(bubbles);
-    // loadBarChart(bubbles);
-    // updateAllCountries(data);
 }
+function loadBars(country_id, year){
+    var dest_immigrants = data_all[year][country_id];
+    var text_labels = {};
+
+    d3.selectAll('#barsMapContainer .data-bars').remove();
+
+    barsmap.labels();
+    d3.selectAll('#barsMapContainer .labels text').text(function(){
+        var key = d3.select(this).text();
+        var elem = d3.select(this);
+        countries_id.forEach(function(t, i){
+            if(key == t && dest_immigrants[i] != 0){
+                var h = dest_immigrants[i] / 5000;
+                var position1 = elem.attr('x');
+                var position2 = elem.attr('y');
+                d3.select('#barsMapContainer .datamap').append('rect')
+                .classed('data-bars', true)
+                .attr('x', position1).attr('y', position2)
+                .attr('height', h).attr('width', 10)
+                .attr("transform", "translate(0,"+-h+")")
+                .style('fill', 'red')
+                console.log(key,position1, position2)
+                console.log(dest_immigrants[i])
+            }
+        })
+        return '';
+    })
+}
+
+function loadColors(country_id, year){
+    var dest_immigrants = data_all[year][country_id];
+    var color_labels = {};
+
+    for (var i = 0; i < dest_immigrants.length; i++) {
+        if (dest_immigrants[i] > 0 && countries_id[i] != -1) {
+            var hue1 = dest_immigrants[i] / 2000 + 171;
+            var hue2 = 221 - dest_immigrants[i] / 900;
+            var hue3 = 164 - dest_immigrants[i] / 1000;
+
+            console.log(hue1, hue2, hue3);
+            var new_color = 'rgb('+hue1+', '+hue2+', '+hue3+')'
+            color_labels[countries_id[i]] = new_color;
+            // lines[countries_id[i]] = 30;
+        }
+    }
+    colormap.updateChoropleth(color_labels, {reset: true})
+}
+
 function loadNumbers(country_id, year){
     var dest_immigrants = data_all[year][country_id];
     var text_labels = {};
     var lines = {};
 
-    for (var i = 0; i < dest_immigrants.length; i++) {
-        // console.log(countries_id[i], dest_immigrants[i], parseInt(dest_immigrants[i]))
-        // if(parseInt(countries_id[i]) == -1){
-        //     text_labels[countries_id[i]] = '';
-        // }
+    d3.selectAll('#textMapContainer .labels text').text('');
 
+    for (var i = 0; i < dest_immigrants.length; i++) {
         if (dest_immigrants[i] > 0 && countries_id[i] != -1) {
+            console.log(dest_immigrants[i])
             text_labels[countries_id[i]] = dest_immigrants[i];
             lines[countries_id[i]] = 30;
         }
     }
-    // console.log(textmap.labels())
-    textmap.labels({'customLabelText': text_labels} );   
-    // textmap.labels();   
+    textmap.labels({'customLabelText': text_labels} );
 
+    d3.selectAll('#textMapContainer .labels text')
+        .text(function(){
+            var d = d3.select(this).text();
+            if(isNaN(parseInt(d))){
+                return '';
+            }
+            else{
+                if(parseInt(d) > 0){
+                    return d;
+                }
+            }
+        });
+
+    d3.select('#textMapContainer .labels').classed('labels-appended', true);
 }
 
 function updateAllCountries(data){
