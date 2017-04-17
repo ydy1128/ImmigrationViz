@@ -34,7 +34,7 @@ var all_countries = [];
 
 var selected_source = '';
 var selected_year = '';
-
+var years_array = [1990, 1995, 2000, 2005, 2010, 2015]
 // All these code will only be executed once the DOM it completely loaded
 $(document).ready(function(){
     // Initializing map
@@ -51,14 +51,24 @@ $(document).ready(function(){
             }
         },
         done: function(datamap) {
+
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-                if(selected_year == ''){
-                    console.log('year not selected')
-                }
-                else{
+                // if(selected_year == ''){
+                //     console.log('year not selected')
+                // }
+                // else{
+                var current_year_index = 0;
+                var timer = setInterval(function(){
                     selected_source = hash_countries[geography.id];
-                    loadBubbles(hash_countries[geography.id], selected_year);
-                }
+                    loadBubbles(hash_countries[geography.id], years_array[current_year_index]);
+                    $('#yearSelected select').val(years_array[current_year_index]).trigger('change');
+                    if(years_array[current_year_index] == 2015){
+                        clearInterval(timer)
+                    }
+                    current_year_index++;
+                }, 3000)
+
+                // }
             });
         }
     });
@@ -76,13 +86,17 @@ $(document).ready(function(){
         },
         done: function(datamap) {
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-               if(selected_year == ''){
-                    console.log('year not selected')
-                }
-                else{
+                var current_year_index = 0;
+                var timer = setInterval(function(){
                     selected_source = hash_countries[geography.id];
-                    loadBars(hash_countries[geography.id], selected_year);
-                }
+                    loadBars(hash_countries[geography.id], years_array[current_year_index]);
+                    $('#yearSelected select').val(years_array[current_year_index]).trigger('change');
+
+                    if(years_array[current_year_index] == 2015){
+                        clearInterval(timer)
+                    }
+                    current_year_index++;
+                }, 3000)
             });
         }
     });
@@ -99,13 +113,16 @@ $(document).ready(function(){
         },
         done: function(datamap) {
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-               if(selected_year == ''){
-                    console.log('year not selected')
-                }
-                else{
+                var current_year_index = 0;
+                var timer = setInterval(function(){
                     selected_source = hash_countries[geography.id];
-                    loadColors(hash_countries[geography.id], selected_year);
-                }
+                    loadColors(hash_countries[geography.id], years_array[current_year_index]);
+                    $('#yearSelected select').val(years_array[current_year_index]).trigger('change');
+                    if(years_array[current_year_index] == 2015){
+                        clearInterval(timer)
+                    }
+                    current_year_index++;
+                }, 1500)
             });
         }
     });
@@ -122,15 +139,17 @@ $(document).ready(function(){
             }
         },
         done: function(datamap) {
-
             datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-                if(selected_year == ''){
-                    console.log('year not selected')
-                }
-                else{
+                var current_year_index = 0;
+                var timer = setInterval(function(){
                     selected_source = hash_countries[geography.id];
-                    loadNumbers(hash_countries[geography.id], selected_year);
-                }
+                    loadNumbers(hash_countries[geography.id], years_array[current_year_index]);
+                    $('#yearSelected select').val(years_array[current_year_index]).trigger('change');
+                    if(years_array[current_year_index] == 2015){
+                        clearInterval(timer)
+                    }
+                    current_year_index++;
+                }, 3000)
 
             });
         }

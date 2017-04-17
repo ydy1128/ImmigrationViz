@@ -10,16 +10,16 @@ let selected_origin = null;
 let selected_dest = null;
 let years = ['1990', '1995', '2000', '2005', '2010', '2015'];
 
-$('#yearSelected select').change(function(){
-	console.log($(this).val())
-	selected_year = $(this).val();
-	if(selected_source == ''){
-		console.log('source not selected')
-	}
-	else{
-		loadBubbles(selected_source, selected_year)
-	}
-})
+// $('#yearSelected select').change(function(){
+// 	console.log($(this).val())
+// 	selected_year = $(this).val();
+// 	if(selected_source == ''){
+// 		console.log('source not selected')
+// 	}
+// 	else{
+// 		loadBubbles(selected_source, selected_year)
+// 	}
+// })
 
 $('#changeMap li').click(function(){
 	let id = $(this).attr('id');
